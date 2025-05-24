@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.InteropServices;
+using System.Text;
 using DiscreteSolver.Core.Language;
 using DiscreteSolver.Core.Pipeline;
 using DiscreteSolver.Core.Structs;
@@ -13,6 +14,12 @@ namespace DiscreteSolver.Console
         {
             System.Console.InputEncoding = Encoding.UTF8;
             System.Console.OutputEncoding = Encoding.UTF8;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                System.Console.InputEncoding = Encoding.Unicode;
+                System.Console.OutputEncoding = Encoding.Unicode;
+            }
 
             string input;
             do
