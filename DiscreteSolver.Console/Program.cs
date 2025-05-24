@@ -12,8 +12,8 @@ namespace DiscreteSolver.Console
 
         static void Main()
         {
-            System.Console.InputEncoding = Encoding.Unicode;
-            System.Console.OutputEncoding = Encoding.Unicode;
+            System.Console.InputEncoding = Encoding.UTF8;
+            System.Console.OutputEncoding = Encoding.UTF8;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
