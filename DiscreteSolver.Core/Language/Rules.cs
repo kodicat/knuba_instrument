@@ -57,8 +57,8 @@ namespace DiscreteSolver.Core.Language
 
     public class Rule
     {
-        static readonly Tokenizer<TokenType> tokenizer;
-        static readonly Grammar grammar;
+        private static readonly Tokenizer<TokenType> tokenizer;
+        private static readonly Grammar grammar;
 
         static Rule()
         {
@@ -84,7 +84,7 @@ namespace DiscreteSolver.Core.Language
         public Expression PatternIn { get; }
         public Expression PatternOut { get; }
 
-        static Expression Parse(string pattern)
+        private static Expression Parse(string pattern)
         {
             var tokens = tokenizer.TryTokenize(pattern);
             return grammar.BuildTree(tokens.Value).Value;

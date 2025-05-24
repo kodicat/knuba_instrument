@@ -3,7 +3,7 @@ using DiscreteSolver.Core.Utils;
 
 namespace DiscreteSolver.Core.Pipeline
 {
-    static class Normalizer
+    internal static class Normalizer
     {
         internal static Expression Normalize(this Expression expr)
         {
@@ -12,7 +12,7 @@ namespace DiscreteSolver.Core.Pipeline
                 .Sort();
         }
 
-        static Expression CombineCommutativeOperators(this Expression expr)
+        private static Expression CombineCommutativeOperators(this Expression expr)
         {
             return expr
                 .AsTree()
@@ -22,7 +22,7 @@ namespace DiscreteSolver.Core.Pipeline
                 .AsExpression();
         }
 
-        static Expression Sort(this Expression expr)
+        private static Expression Sort(this Expression expr)
         {
             return expr
                 .AsTree()

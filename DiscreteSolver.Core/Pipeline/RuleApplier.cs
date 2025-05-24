@@ -4,14 +4,14 @@ using DiscreteSolver.Core.Utils;
 
 namespace DiscreteSolver.Core.Pipeline
 {
-    class RuleApplier
+    internal class RuleApplier
     {
-        static readonly Cache<Guid, string, Expression> cache = new Cache<Guid, string, Expression>();
+        private static readonly Cache<Guid, string, Expression> cache = new Cache<Guid, string, Expression>();
 
         internal Expression ApplyRuleWithCache(Expression expression, Rule rule)
             => cache.GetCachedOrExecute(rule.Id, expression.ToString(), () => ApplyRule(expression, rule));
 
-        Expression ApplyRule(Expression expression, Rule rule)
+        private Expression ApplyRule(Expression expression, Rule rule)
         {
             var variables = new Dictionary<string, Expression>();
 
@@ -21,7 +21,7 @@ namespace DiscreteSolver.Core.Pipeline
             return null;
         }
 
-        static bool CheckMatch(Expression toBeMatched, Expression pattern, Dictionary<string, Expression> variables)
+        private static bool CheckMatch(Expression toBeMatched, Expression pattern, Dictionary<string, Expression> variables)
         {
             if (pattern.IsVariable())
             {

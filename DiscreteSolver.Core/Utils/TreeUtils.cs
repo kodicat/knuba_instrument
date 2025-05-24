@@ -2,7 +2,7 @@
 
 namespace DiscreteSolver.Core.Utils
 {
-    static class TreeUtils
+    internal static class TreeUtils
     {
         internal static List<List<T>> GetPermutations<T>(this IEnumerable<T> list, int length)
         {

@@ -9,7 +9,7 @@
             Id = Guid.NewGuid();
         }
 
-        Difference(string value, Expression[] children, Guid id)
+        private Difference(string value, Expression[] children, Guid id)
         {
             Value = value;
             Children = children;

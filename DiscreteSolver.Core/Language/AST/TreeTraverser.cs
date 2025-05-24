@@ -1,6 +1,6 @@
 ﻿namespace DiscreteSolver.Core.Language.AST
 {
-    static class TreeTraverser
+    internal static class TreeTraverser
     {
         internal static IEnumerable<Expression> AsEnumerable(this Expression expr)
         {
@@ -40,7 +40,7 @@
 
         public static Expression AsExpression(this Tree tree) => tree.Children[0];
 
-        static void DepthFirstSearchPostOrder(this Expression expr, Func<Expression, bool> predicate, Func<Expression, Expression> func)
+        private static void DepthFirstSearchPostOrder(this Expression expr, Func<Expression, bool> predicate, Func<Expression, Expression> func)
         {
             foreach (var child in expr.Children)
                 child.DepthFirstSearchPostOrder(predicate, func);
@@ -48,7 +48,7 @@
             expr.Children = expr.Children.Select(x => predicate(x) ? func(x) : x).ToArray();
         }
 
-        static void DepthFirstSearchPostOrder(
+        private static void DepthFirstSearchPostOrder(
             this Expression expr,
             Func<Expression, Expression, bool> predicate,
             Func<Expression, IEnumerable<Expression>> func)
@@ -59,7 +59,7 @@
             expr.Children = expr.Children.SelectMany(x => predicate(x, expr) ? func(x).ToArray() : new[] { x }).ToArray();
         }
 
-        static void DepthFirstSearchPostOrder<T>(
+        private static void DepthFirstSearchPostOrder<T>(
             this Expression expr,
             Func<Expression, bool> predicate,
             Func<Expression, T> selector)

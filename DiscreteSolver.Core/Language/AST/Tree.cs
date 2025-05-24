@@ -2,7 +2,7 @@
 {
     public class Tree : Expression
     {
-        const string TreeValue = "Tree";
+        private const string TreeValue = "Tree";
 
         public Tree(Expression child)
         {

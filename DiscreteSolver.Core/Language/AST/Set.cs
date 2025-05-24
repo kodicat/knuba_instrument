@@ -5,14 +5,14 @@
         public Set(string value)
         {
             Value = value;
-            Children = Array.Empty<Expression>();
+            Children = [];
             Id = Guid.NewGuid();
         }
 
-        Set(string value, Guid id)
+        private Set(string value, Guid id)
         {
             Value = value;
-            Children = Array.Empty<Expression>();
+            Children = [];
             Id = id;
         }
 

@@ -2,7 +2,7 @@
 {
     public class Negation : Expression
     {
-        readonly bool isPrefixNegation;
+        private readonly bool isPrefixNegation;
 
         public Negation(string value, Expression child, bool isPrefixNegation = false)
         {
@@ -12,7 +12,7 @@
             Id = Guid.NewGuid();
         }
 
-        Negation(string value, Expression child, bool isPrefixNegation, Guid id)
+        private Negation(string value, Expression child, bool isPrefixNegation, Guid id)
         {
             this.isPrefixNegation = isPrefixNegation;
             Value = value;

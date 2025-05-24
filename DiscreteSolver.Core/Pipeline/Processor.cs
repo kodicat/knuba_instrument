@@ -40,7 +40,7 @@ namespace DiscreteSolver.Core.Pipeline
             return result;
         }
 
-        static int GetErrorIndex(Superpower.Model.Position position)
+        private static int GetErrorIndex(Superpower.Model.Position position)
         {
             return position.HasValue && position.Line == 1
                 ? position.Column - 1

@@ -5,14 +5,14 @@ using Superpower.Tokenizers;
 
 namespace DiscreteSolver.Core.Language
 {
-    interface IProvideTokenizer
+    internal interface IProvideTokenizer
     {
         Tokenizer<TokenType> GetTokenizer();
     }
 
     public class Syntax : IProvideTokenizer
     {
-        readonly TokenizerBuilder<TokenType> syntaxBuilder;
+        private readonly TokenizerBuilder<TokenType> syntaxBuilder;
 
         public Syntax(ISettings settings)
         {
@@ -22,9 +22,9 @@ namespace DiscreteSolver.Core.Language
         public Tokenizer<TokenType> GetTokenizer() => syntaxBuilder.Build();
     }
 
-    class SyntaxWithVariables : IProvideTokenizer
+    internal class SyntaxWithVariables : IProvideTokenizer
     {
-        readonly TokenizerBuilder<TokenType> syntaxBuilder;
+        private readonly TokenizerBuilder<TokenType> syntaxBuilder;
 
         public SyntaxWithVariables(ISettings settings)
         {
@@ -38,7 +38,7 @@ namespace DiscreteSolver.Core.Language
                 .Build();
     }
 
-    class SyntaxBuilder
+    internal class SyntaxBuilder
     {
         internal TokenizerBuilder<TokenType> Builder { get; }
 

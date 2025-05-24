@@ -2,9 +2,9 @@
 
 namespace DiscreteSolver.Core.Pipeline
 {
-    class Printer
+    internal class Printer
     {
-        readonly List<SimplificationDescription> lines = new List<SimplificationDescription>();
+        private readonly List<SimplificationDescription> lines = new List<SimplificationDescription>();
 
         internal SimplificationDescription Add(Substitution value)
         {

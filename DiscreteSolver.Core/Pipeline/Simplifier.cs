@@ -4,10 +4,10 @@ using DiscreteSolver.Core.Utils;
 
 namespace DiscreteSolver.Core.Pipeline
 {
-    class Simplifier
+    internal class Simplifier
     {
-        readonly PatternMatcher patternMatcher;
-        readonly Printer printer;
+        private readonly PatternMatcher patternMatcher;
+        private readonly Printer printer;
 
         public Simplifier(PatternMatcher patternMatcher, Printer printer)
         {
@@ -59,7 +59,7 @@ namespace DiscreteSolver.Core.Pipeline
             }
         }
 
-        MyResult<Simplification> SimplifySubExpression(Expression expr)
+        private MyResult<Simplification> SimplifySubExpression(Expression expr)
         {
             var expression = expr;
             var substitutions = new List<Substitution>();
@@ -94,7 +94,7 @@ namespace DiscreteSolver.Core.Pipeline
             return (Simplification) null;
         }
 
-        List<Substitution> AdjustSubstitutions(List<Substitution> subs, Guid id, Expression expression)
+        private List<Substitution> AdjustSubstitutions(List<Substitution> subs, Guid id, Expression expression)
         {
             var substitutions = new List<Substitution>();
 

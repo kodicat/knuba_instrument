@@ -9,7 +9,7 @@
             Id = Guid.NewGuid();
         }
 
-        Union(string value, Expression[] children, Guid id)
+        private Union(string value, Expression[] children, Guid id)
         {
             Value = value;
             Children = children;

@@ -9,7 +9,7 @@
             Id = Guid.NewGuid();
         }
 
-        Intersection(string value, Expression[] children, Guid id)
+        private Intersection(string value, Expression[] children, Guid id)
         {
             Value = value;
             Children = children;

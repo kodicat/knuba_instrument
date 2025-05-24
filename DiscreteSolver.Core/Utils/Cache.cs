@@ -1,8 +1,8 @@
 ﻿namespace DiscreteSolver.Core.Utils
 {
-    class Cache<TKey, TSecondaryKey, TValue>
+    internal class Cache<TKey, TSecondaryKey, TValue>
     {
-        readonly Dictionary<TKey, Dictionary<TSecondaryKey, TValue>> cache = new Dictionary<TKey, Dictionary<TSecondaryKey, TValue>>();
+        private readonly Dictionary<TKey, Dictionary<TSecondaryKey, TValue>> cache = new Dictionary<TKey, Dictionary<TSecondaryKey, TValue>>();
 
         internal TValue GetCachedOrExecute(TKey key, TSecondaryKey secondaryKey, Func<TValue> func)
         {
@@ -14,7 +14,7 @@
             return result;
         }
 
-        bool TryGetValue(TKey key, TSecondaryKey secondaryKey, out TValue value)
+        private bool TryGetValue(TKey key, TSecondaryKey secondaryKey, out TValue value)
         {
             if (!cache.ContainsKey(key) || !cache[key].ContainsKey(secondaryKey))
             {
@@ -26,7 +26,7 @@
             return true;
         }
 
-        void Store(TKey key, TSecondaryKey secondaryKey, TValue value)
+        private void Store(TKey key, TSecondaryKey secondaryKey, TValue value)
         {
             if (!cache.TryGetValue(key, out _))
                 cache[key] = new Dictionary<TSecondaryKey, TValue>();

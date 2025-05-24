@@ -3,7 +3,7 @@ using DiscreteSolver.Core.Language.AST;
 
 namespace DiscreteSolver.Core.Utils
 {
-    static class Extensions
+    internal static class Extensions
     {
         internal static ISettings Combine(this ISettings source, ISettings other)
         {

@@ -9,19 +9,19 @@ namespace DiscreteSolver.Core.Language
 
     public class Grammar
     {
-        ExpressionParser Set { get; }
-        ExpressionParser UniverseSet { get; }
-        ExpressionParser EmptySet { get; }
-        ExpressionParser Variable { get; }
-        ExpressionParser ExpressionInParens { get; }
-        ExpressionParser Factor { get; }
-        ExpressionParser PrefixNegation { get; }
-        ExpressionParser PostfixNegation { get; }
-        ExpressionParser Term { get; }
-        ExpressionParser Difference { get; }
-        ExpressionParser Intersection { get; }
-        ExpressionParser Union { get; }
-        ExpressionParser SymmetricDifference { get; }
+        private ExpressionParser Set { get; }
+        private ExpressionParser UniverseSet { get; }
+        private ExpressionParser EmptySet { get; }
+        private ExpressionParser Variable { get; }
+        private ExpressionParser ExpressionInParens { get; }
+        private ExpressionParser Factor { get; }
+        private ExpressionParser PrefixNegation { get; }
+        private ExpressionParser PostfixNegation { get; }
+        private ExpressionParser Term { get; }
+        private ExpressionParser Difference { get; }
+        private ExpressionParser Intersection { get; }
+        private ExpressionParser Union { get; }
+        private ExpressionParser SymmetricDifference { get; }
 
         public Grammar(ISettings settings)
         {
@@ -77,7 +77,7 @@ namespace DiscreteSolver.Core.Language
                 (value, child1, child2) => new SymmetricDifference(value, child1, child2));
         }
 
-        Expression CreateNegationOperation(string value, bool isPrefix, Expression expression, int count)
+        private Expression CreateNegationOperation(string value, bool isPrefix, Expression expression, int count)
         {
             if (count < 1) throw new ArgumentOutOfRangeException(nameof(count));
 

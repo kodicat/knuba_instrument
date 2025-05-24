@@ -5,10 +5,10 @@ using DiscreteSolver.Core.Utils;
 
 namespace DiscreteSolver.Core.Pipeline
 {
-    class PatternMatcher
+    internal class PatternMatcher
     {
-        readonly List<Rule> rules;
-        readonly RuleApplier ruleApplier;
+        private readonly List<Rule> rules;
+        private readonly RuleApplier ruleApplier;
 
         public PatternMatcher(List<Rule> rules, RuleApplier ruleApplier)
         {
@@ -26,7 +26,7 @@ namespace DiscreteSolver.Core.Pipeline
                         .AsEnumerable()
                         .Where(x => x.HasChildren())
                         .Select(x => new { Permutation = permutation, NodeVariation = x }))
-                .DistinctBy(x => x.NodeVariation.ToString())
+                .DistinctBy2(x => x.NodeVariation.ToString())
                 .ToList();
 
             foreach (var rule in rules)
@@ -57,7 +57,7 @@ namespace DiscreteSolver.Core.Pipeline
             return (Substitution)null;
         }
 
-        static IEnumerable<Expression> GetCommutativityPermutations(Expression expr, Guid? guid = null)
+        private static IEnumerable<Expression> GetCommutativityPermutations(Expression expr, Guid? guid = null)
         {
             var guidIsMet = false;
 

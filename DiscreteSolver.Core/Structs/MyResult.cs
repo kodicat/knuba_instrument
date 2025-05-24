@@ -2,7 +2,7 @@
 {
     public class MyResult<T>
     {
-        static readonly MyResult<T> empty = new MyResult<T>();
+        private static readonly MyResult<T> empty = new MyResult<T>();
 
         public MyResult(string errorMessage, int errorIndex, string token = null)
         {
@@ -12,13 +12,13 @@
             HasValue = false;
         }
 
-        MyResult(T value)
+        private MyResult(T value)
         {
             Value = value;
             HasValue = true;
         }
 
-        MyResult()
+        private MyResult()
         {
             HasValue = false;
         }

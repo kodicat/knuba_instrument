@@ -9,7 +9,7 @@
             Id = Guid.NewGuid();
         }
 
-        SymmetricDifference(string value, Expression[] children, Guid id)
+        private SymmetricDifference(string value, Expression[] children, Guid id)
         {
             Value = value;
             Children = children;
