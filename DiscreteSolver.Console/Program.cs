@@ -11,8 +11,8 @@ namespace DiscreteSolver.Console
 
         static void Main()
         {
-            System.Console.InputEncoding = Encoding.UTF8;
-            System.Console.OutputEncoding = Encoding.UTF8;
+            System.Console.InputEncoding = Encoding.Unicode;
+            System.Console.OutputEncoding = Encoding.Unicode;
 
             string input;
             do
