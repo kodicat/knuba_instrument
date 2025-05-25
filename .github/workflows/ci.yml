@@ -34,9 +34,6 @@ jobs:
           --no-build
           --verbosity normal
 
-      - name: Show files in TestResults
-        run: ls -R ./TestResults
-
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
