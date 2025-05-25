@@ -34,16 +34,26 @@ jobs:
           --no-build
           --verbosity normal
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./TestResults/**/coverage.cobertura.xml
-          flags: unittests
-          name: codecov-coverage
-          fail_ci_if_error: true
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Convert coverage to HTML
+        run: >
+          reportgenerator
+            -reports:./TestResults/**/coverage.cobertura.xml
+            -targetdir:./TestResults/coverage-report
+            -reporttypes:Html
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage-report
+
+      - name: Comment PR with coverage link (optional)
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            ✅ Code coverage report generated.
+            📊 [View HTML report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/TestResults/coverage-report/index.html)
