@@ -41,18 +41,16 @@ jobs:
         run: mkdir -p docs/coverage
 
       - name: Convert coverage to HTML
-        run: reportgenerator -reports:TestResults/*/coverage.cobertura.xml -targetdir:docs/coverage -reporttypes:Html
+        run: reportgenerator -reports:TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:HtmlInline_AzurePipelines;MarkdownSummary
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: docs/coverage
+          path: coverage-report
 
       - name: Comment PR with coverage link
         if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          message: |
-            ✅ Code coverage report generated.
-            📊 [View HTML report](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/coverage/index.html)
+          path: coverage-report/Summary.md
