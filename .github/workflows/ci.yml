@@ -1,0 +1,84 @@
+name: CI - Build and Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests with coverage
+        run: dotnet test DiscreteSolver.sln --collect:"XPlat Code Coverage" --results-directory:"TestResults" --configuration:"Release" --no-build | tee test_output.log
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Convert coverage to HTML
+        run: reportgenerator -reports:TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:MarkdownSummary
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
+
+      - name: Parse test results and coverage summary
+        run: |
+          SUMMARY_LINE=$(grep -oE 'Failed:[[:space:]]+[0-9]+,[[:space:]]+Passed:[[:space:]]+[0-9]+,[[:space:]]+Skipped:[[:space:]]+[0-9]+,[[:space:]]+Total:[[:space:]]+[0-9]+,[[:space:]]+Duration:[[:space:]]+[0-9]+[[:space:]]+s' test_output.log || echo "")
+
+          if [[ -z "$SUMMARY_LINE" ]]; then
+            echo "No test summary found"
+            SUMMARY_LINE="Passed: 0, Failed: 0, Skipped: 0, Total: 0, Duration: 0 s"
+          fi
+
+          FAILED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Failed") print $(i+1)}')
+          PASSED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Passed") print $(i+1)}')
+          SKIPPED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Skipped") print $(i+1)}')
+          TOTAL=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Total") print $(i+1)}')
+          DURATION=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Duration") print $(i+1)" s"}')
+
+          LINE_COVERAGE=$(grep -m 1 "Line coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
+          BRANCH_COVERAGE=$(grep -m 1 "Branch coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
+
+          echo "   **Test Results**" >> pr-comment.md
+          echo "✔️ Passed:   $PASSED" >> pr-comment.md
+          echo "❌ Failed:   $FAILED" >> pr-comment.md
+          echo "⏭️ Skipped:  $SKIPPED" >> pr-comment.md
+          echo "📦 Total:    $TOTAL" >> pr-comment.md
+          echo "⏱️ Duration: $DURATION" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo "   **Test Coverage**" >> pr-comment.md
+          echo "📊 Line Coverage: $LINE_COVERAGE" >> pr-comment.md
+          echo "📊 Branch Coverage: $BRANCH_COVERAGE" >> pr-comment.md
+          echo "" >> pr-comment.md
+          # Add collapsible full coverage table
+          echo "<details>" >> pr-comment.md
+          echo "<summary>📄 Full Coverage Summary (click to see)</summary>" >> pr-comment.md
+          echo "" >> pr-comment.md
+          cat coverage-report/Summary.md >> pr-comment.md
+          echo "</details>" >> pr-comment.md
+
+      - name: Comment PR with coverage link
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: pr-comment.md
+          hide_and_recreate: true

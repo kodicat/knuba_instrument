@@ -21,7 +21,7 @@ namespace DiscreteSolver.Console
                 System.Console.OutputEncoding = Encoding.Unicode;
             }
 
-            string input;
+            string? input;
             do
             {
                 System.Console.ResetColor();
