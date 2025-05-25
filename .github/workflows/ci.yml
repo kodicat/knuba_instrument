@@ -45,15 +45,15 @@ jobs:
 
       - name: Parse test results and coverage summary
         run: |
-          SUMMARY_LINE=$(grep -oE 'Passed:[[:space:]]+[0-9]+,[[:space:]]+Failed:[[:space:]]+[0-9]+,[[:space:]]+Skipped:[[:space:]]+[0-9]+,[[:space:]]+Total:[[:space:]]+[0-9]+,[[:space:]]+Duration:[[:space:]]+[0-9]+[[:space:]]+s' test_output.log || echo "")
+          SUMMARY_LINE=$(grep -oE 'Failed:[[:space:]]+[0-9]+,[[:space:]]+Passed:[[:space:]]+[0-9]+,[[:space:]]+Skipped:[[:space:]]+[0-9]+,[[:space:]]+Total:[[:space:]]+[0-9]+,[[:space:]]+Duration:[[:space:]]+[0-9]+[[:space:]]+s' test_output.log || echo "")
 
           if [[ -z "$SUMMARY_LINE" ]]; then
             echo "No test summary found"
             SUMMARY_LINE="Passed: 0, Failed: 0, Skipped: 0, Total: 0, Duration: 0 s"
           fi
           
-          PASSED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Passed") print $(i+1)}')
           FAILED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Failed") print $(i+1)}')
+          PASSED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Passed") print $(i+1)}')
           SKIPPED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Skipped") print $(i+1)}')
           TOTAL=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Total") print $(i+1)}')
           DURATION=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Duration") print $(i+1)" s"}')
@@ -74,7 +74,7 @@ jobs:
 
           # Add collapsible full coverage table
           echo "<details>" >> pr-comment.md
-          echo "<summary>📄 Full Coverage Summary</summary>" >> pr-comment.md
+          echo "<summary>📄 Full Coverage Summary (click to see)</summary>" >> pr-comment.md
           echo "" >> pr-comment.md
           cat coverage-report/Summary.md >> pr-comment.md
           echo "</details>" >> pr-comment.md
