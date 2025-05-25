@@ -31,9 +31,6 @@ jobs:
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-      - name: Create docs folder
-        run: mkdir -p docs/coverage
-
       - name: Convert coverage to HTML
         run: reportgenerator -reports:TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:MarkdownSummary
 
