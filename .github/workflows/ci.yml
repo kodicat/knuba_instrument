@@ -27,9 +27,12 @@ jobs:
 
       - name: Run tests with coverage
         run: >
-          dotnet test --no-build --verbosity normal
+          dotnet test DiscreteSolver.sln
           --collect:"XPlat Code Coverage"
           --results-directory ./TestResults
+          --configuration Release
+          --no-build
+          --verbosity normal
 
       - name: Convert coverage to HTML
         run: |
