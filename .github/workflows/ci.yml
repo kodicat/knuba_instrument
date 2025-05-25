@@ -45,16 +45,21 @@ jobs:
 
       - name: Parse test results and coverage summary
         run: |
-          SUMMARY_LINE=$(grep -oP 'Passed:\s+\d+,\s+Failed:\s+\d+,\s+Skipped:\s+\d+,\s+Total:\s+\d+,\s+Duration:\s+\d+\s+s' test_output.log)
+          SUMMARY_LINE=$(grep -oE 'Passed:[[:space:]]+[0-9]+,[[:space:]]+Failed:[[:space:]]+[0-9]+,[[:space:]]+Skipped:[[:space:]]+[0-9]+,[[:space:]]+Total:[[:space:]]+[0-9]+,[[:space:]]+Duration:[[:space:]]+[0-9]+[[:space:]]+s' test_output.log || echo "")
 
-          PASSED=$(echo "$SUMMARY_LINE" | grep -oP 'Passed:\s+\K\d+')
-          FAILED=$(echo "$SUMMARY_LINE" | grep -oP 'Failed:\s+\K\d+')
-          SKIPPED=$(echo "$SUMMARY_LINE" | grep -oP 'Skipped:\s+\K\d+')
-          TOTAL=$(echo "$SUMMARY_LINE" | grep -oP 'Total:\s+\K\d+')
-          DURATION=$(echo "$SUMMARY_LINE" | grep -oP 'Duration:\s+\K\d+\s+s')
+          if [[ -z "$SUMMARY_LINE" ]]; then
+            echo "No test summary found"
+            SUMMARY_LINE="Passed: 0, Failed: 0, Skipped: 0, Total: 0, Duration: 0 s"
+          fi
+          
+          PASSED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Passed") print $(i+1)}')
+          FAILED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Failed") print $(i+1)}')
+          SKIPPED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Skipped") print $(i+1)}')
+          TOTAL=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Total") print $(i+1)}')
+          DURATION=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Duration") print $(i+1)" s"}')
 
-          LINE_COVERAGE=$(grep -m 1 -oP 'Line coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
-          BRANCH_COVERAGE=$(grep -m 1 -oP 'Branch coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
+          LINE_COVERAGE=$(grep -m 1 "Line coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
+          BRANCH_COVERAGE=$(grep -m 1 "Branch coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
 
           echo "🧪 **Test Results**" > pr-comment.md
           echo "✔️ Passed:   $PASSED" >> pr-comment.md
