@@ -67,10 +67,11 @@ jobs:
           echo "⏭️ Skipped:  $SKIPPED" >> pr-comment.md
           echo "📦 Total:    $TOTAL" >> pr-comment.md
           echo "⏱️ Duration: $DURATION" >> pr-comment.md
-          echo "" >> pr-comment.md
-          echo "📊 **Line Coverage**: $LINE_COVERAGE" >> pr-comment.md
-          echo "📊 **Branch Coverage**: $BRANCH_COVERAGE" >> pr-comment.md
-          echo "" >> pr-comment.md
+          echo "---" >> pr-comment.md
+          echo "🧪 **Test Coverage**" > pr-comment.md
+          echo "📊 Line Coverage: $LINE_COVERAGE" >> pr-comment.md
+          echo "📊 Branch Coverage: $BRANCH_COVERAGE" >> pr-comment.md
+          echo "---" >> pr-comment.md
           # Add collapsible full coverage table
           echo "<details>" >> pr-comment.md
           echo "<summary>📄 Full Coverage Summary (click to see)</summary>" >> pr-comment.md
