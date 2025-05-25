@@ -84,3 +84,4 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           path: pr-comment.md
+          hide_and_recreate: true
