@@ -61,14 +61,14 @@ jobs:
           LINE_COVERAGE=$(grep -m 1 "Line coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
           BRANCH_COVERAGE=$(grep -m 1 "Branch coverage" coverage-report/Summary.md | sed -E 's/.*\|\s*([0-9.]+%).*/\1/' || echo "N/A")
 
-          echo "🧪 **Test Results**" > pr-comment.md
+          echo "   **Test Results**" >> pr-comment.md
           echo "✔️ Passed:   $PASSED" >> pr-comment.md
           echo "❌ Failed:   $FAILED" >> pr-comment.md
           echo "⏭️ Skipped:  $SKIPPED" >> pr-comment.md
           echo "📦 Total:    $TOTAL" >> pr-comment.md
           echo "⏱️ Duration: $DURATION" >> pr-comment.md
           echo "" >> pr-comment.md
-          echo "🧪 **Test Coverage**" > pr-comment.md
+          echo "   **Test Coverage**" >> pr-comment.md
           echo "📊 Line Coverage: $LINE_COVERAGE" >> pr-comment.md
           echo "📊 Branch Coverage: $BRANCH_COVERAGE" >> pr-comment.md
           echo "" >> pr-comment.md
