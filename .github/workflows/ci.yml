@@ -51,7 +51,7 @@ jobs:
             echo "No test summary found"
             SUMMARY_LINE="Passed: 0, Failed: 0, Skipped: 0, Total: 0, Duration: 0 s"
           fi
-          
+
           FAILED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Failed") print $(i+1)}')
           PASSED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Passed") print $(i+1)}')
           SKIPPED=$(echo "$SUMMARY_LINE" | awk -F'[ ,:]+' '{for(i=1;i<=NF;i++) if($i=="Skipped") print $(i+1)}')
@@ -67,13 +67,11 @@ jobs:
           echo "⏭️ Skipped:  $SKIPPED" >> pr-comment.md
           echo "📦 Total:    $TOTAL" >> pr-comment.md
           echo "⏱️ Duration: $DURATION" >> pr-comment.md
-
           echo "" >> pr-comment.md
           echo "   **Coverage Results**" > pr-comment.md
           echo "   Line Coverage: $LINE_COVERAGE" >> pr-comment.md
           echo "   Branch Coverage: $BRANCH_COVERAGE" >> pr-comment.md
           echo "" >> pr-comment.md
-
           echo "<details>" >> pr-comment.md
           echo "<summary>Full Coverage Summary (click to see)</summary>" >> pr-comment.md
           echo "" >> pr-comment.md
