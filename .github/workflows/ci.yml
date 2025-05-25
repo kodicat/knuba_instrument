@@ -49,8 +49,43 @@ jobs:
           name: coverage-report
           path: coverage-report
 
+      - name: Parse test results and coverage summary
+        run: |
+          # Extract test summary
+          SUMMARY_LINE=$(grep -oP 'Passed:\s+\d+,\s+Failed:\s+\d+,\s+Skipped:\s+\d+,\s+Total:\s+\d+,\s+Duration:\s+\d+\s+s' test_output.log)
+
+          PASSED=$(echo "$SUMMARY_LINE" | grep -oP 'Passed:\s+\K\d+')
+          FAILED=$(echo "$SUMMARY_LINE" | grep -oP 'Failed:\s+\K\d+')
+          SKIPPED=$(echo "$SUMMARY_LINE" | grep -oP 'Skipped:\s+\K\d+')
+          TOTAL=$(echo "$SUMMARY_LINE" | grep -oP 'Total:\s+\K\d+')
+          DURATION=$(echo "$SUMMARY_LINE" | grep -oP 'Duration:\s+\K\d+\s+s')
+
+          # Extract line coverage from Summary.md (if exists)
+          LINE_COVERAGE=$(grep -m 1 -oP 'Line coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
+          BRANCH_COVERAGE=$(grep -m 1 -oP 'Branch coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
+
+          echo "🧪 **Test Results**" > pr-comment.md
+          echo "✔️ Passed:   $PASSED" >> pr-comment.md
+          echo "❌ Failed:   $FAILED" >> pr-comment.md
+          echo "⏭️ Skipped:  $SKIPPED" >> pr-comment.md
+          echo "📦 Total:    $TOTAL" >> pr-comment.md
+          echo "⏱️ Duration: $DURATION" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo "📊 **Line Coverage**: LINE_COVERAGE" >> pr-comment.md
+          echo "📊 **Branch Coverage**: BRANCH_COVERAGE" >> pr-comment.md
+          echo "" >> pr-comment.md
+
+          # Add collapsible full coverage table
+          echo "<details>" >> pr-comment.md
+          echo "<summary>📄 Full Coverage Summary</summary>" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo '```text' >> pr-comment.md
+          cat coverage-report/Summary.md >> pr-comment.md
+          echo '```' >> pr-comment.md
+          echo "</details>" >> pr-comment.md
+
       - name: Comment PR with coverage link
         if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          path: coverage-report/Summary.md
+          path: pr-comment.md
