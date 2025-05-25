@@ -51,7 +51,6 @@ jobs:
 
       - name: Parse test results and coverage summary
         run: |
-          # Extract test summary
           SUMMARY_LINE=$(grep -oP 'Passed:\s+\d+,\s+Failed:\s+\d+,\s+Skipped:\s+\d+,\s+Total:\s+\d+,\s+Duration:\s+\d+\s+s' test_output.log)
 
           PASSED=$(echo "$SUMMARY_LINE" | grep -oP 'Passed:\s+\K\d+')
@@ -60,7 +59,6 @@ jobs:
           TOTAL=$(echo "$SUMMARY_LINE" | grep -oP 'Total:\s+\K\d+')
           DURATION=$(echo "$SUMMARY_LINE" | grep -oP 'Duration:\s+\K\d+\s+s')
 
-          # Extract line coverage from Summary.md (if exists)
           LINE_COVERAGE=$(grep -m 1 -oP 'Line coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
           BRANCH_COVERAGE=$(grep -m 1 -oP 'Branch coverage[^|]*\|\s*\K[0-9.]+%' coverage-report/Summary.md || echo "N/A")
 
@@ -71,8 +69,8 @@ jobs:
           echo "📦 Total:    $TOTAL" >> pr-comment.md
           echo "⏱️ Duration: $DURATION" >> pr-comment.md
           echo "" >> pr-comment.md
-          echo "📊 **Line Coverage**: LINE_COVERAGE" >> pr-comment.md
-          echo "📊 **Branch Coverage**: BRANCH_COVERAGE" >> pr-comment.md
+          echo "📊 **Line Coverage**: $LINE_COVERAGE" >> pr-comment.md
+          echo "📊 **Branch Coverage**: $BRANCH_COVERAGE" >> pr-comment.md
           echo "" >> pr-comment.md
 
           # Add collapsible full coverage table
