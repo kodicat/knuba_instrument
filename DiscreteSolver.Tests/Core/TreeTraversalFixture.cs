@@ -22,19 +22,19 @@ namespace DiscreteSolver.Tests.Core
         [DataRow("A", "A'")]
         [DataRow("A + B", "(A' + B')'")]
         [DataRow("(A * B) + (C * D)", "((A' * B')' + (C' * D')')'")]
-        public void ChangeTreeShoudComplementAllTreeMembers(string input, string output)
+        public void ChangeTreeShouldComplementAllTreeMembers(string input, string output)
         {
             var tokenizer = syntax.GetTokenizer();
             var tokensResult = tokenizer.TryTokenize(input);
             var parseResult = grammar.BuildTree(tokensResult.Value);
 
             var expr = parseResult.Value;
-            var actual = expr.SubstituteNode(x => true, x => new Negation("'", x));
+            var actual = expr.SubstituteNode(_ => true, x => new Negation("'", x));
 
             var expectedTokens = tokenizer.TryTokenize(output).Value;
             var expected = grammar.BuildTree(expectedTokens).Value;
 
-            var equal = TreeUtils.StrictEquals(expected, actual);
+            var equal = expected.StrictEquals(actual);
 
             Assert.IsTrue(equal, "The tree is not complemented");
         }
@@ -43,7 +43,7 @@ namespace DiscreteSolver.Tests.Core
         [DataRow("A'", "A")]
         [DataRow("(A' + B')'", "A + B")]
         [DataRow("((A' * B')' + (C' * D')')'", "(A * B) + (C * D)")]
-        public void ChangeTreeShoudRemoveAllComplements(string input, string output)
+        public void ChangeTreeShouldRemoveAllComplements(string input, string output)
         {
             var tokenizer = syntax.GetTokenizer();
             var tokensResult = tokenizer.TryTokenize(input);
@@ -55,7 +55,7 @@ namespace DiscreteSolver.Tests.Core
             var expectedTokens = tokenizer.TryTokenize(output).Value;
             var expected = grammar.BuildTree(expectedTokens).Value;
 
-            var equal = TreeUtils.StrictEquals(expected, actual);
+            var equal = expected.StrictEquals(actual);
 
             Assert.IsTrue(equal, "The tree is not complemented");
         }

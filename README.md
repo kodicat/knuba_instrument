@@ -34,13 +34,54 @@
    git clone git@github.com:kodicat/knuba_instrument.git
    cd knuba_instrument
    ```
-1. Запустіть тести з командного рядка:
-   ```bash
-   dotnet run
-   ```
 1. Запустіть консольний застосунок з командного рядка:
    ```bash
    cd cd DiscreteSolver.Console
    dotnet run
    ```
 1. Введіть вираз теорії множин до прикладу - `(A' + C)' + (B + B * C) * (B' + (B + C)')`
+
+---
+
+## 🔧 Як тестувати проект
+
+1. Переконайтесь, що у вас встановлено [.NET 8 SDK](https://dotnet.microsoft.com/).
+1. Запуст тестів:
+   ```bash
+   dotnet test
+   ```
+1. Запустіть тести з розширеним виводом:
+   ```bash
+   dotnet test --logger:"console;verbosity=detailed"
+   ```
+1. Переконайтесь, що у вас встановлено coverlet.console:
+   ```bash
+   dotnet tool install --global coverlet.console
+   ```
+1. Переконайтесь, що у вас встановлено dotnet-reportgenerator-globaltool:
+   ```bash
+   dotnet tool install --global dotnet-reportgenerator-globaltool
+   ```
+1. Перейдіть в директорію з тестовим проектом:
+   ```
+   cd DiscreteSolver.Tests
+   ```
+1. Запустіть покриття тестів:
+   ```bash
+   coverlet ./bin/Debug/net8.0/DiscreteSolver.Tests.dll \
+    --target "dotnet" \
+    --targetargs "test --no-build" \
+    --format cobertura \
+    --output ./TestResults/coverage.cobertura.xml
+   ```
+1. Згенеруйте HTML-звіт з coverage.cobertura.xml:
+   ```bash
+   reportgenerator \
+    -reports:./TestResults/coverage.cobertura.xml \
+    -targetdir:./TestResults/coverage-report \
+    -reporttypes:Html
+   ```
+1. Відкрити HTML-звіт
+   ```bash
+   open ./TestResults/coverage-report/index.html
+   ```
