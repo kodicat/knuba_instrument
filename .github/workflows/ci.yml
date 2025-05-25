@@ -76,9 +76,7 @@ jobs:
           echo "<details>" >> pr-comment.md
           echo "<summary>📄 Full Coverage Summary</summary>" >> pr-comment.md
           echo "" >> pr-comment.md
-          echo '```text' >> pr-comment.md
           cat coverage-report/Summary.md >> pr-comment.md
-          echo '```' >> pr-comment.md
           echo "</details>" >> pr-comment.md
 
       - name: Comment PR with coverage link
